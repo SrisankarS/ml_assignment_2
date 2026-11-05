@@ -30,6 +30,16 @@ st.set_page_config(
 
 st.title("🌱 Dry Bean Classification")
 st.subheader("Machine Learning Model Evaluation")
+st.markdown("""
+<style>
+div[data-testid="stMetricValue"] {
+    font-size: 1.5rem;
+}
+div[data-testid="stMetricLabel"] {
+    font-size: 0.85rem;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.write(
     "Upload a labelled test dataset, select a trained "
@@ -243,7 +253,7 @@ if uploaded_file is not None:
             labels=class_labels
         )
 
-        fig, ax = plt.subplots(figsize=(7, 5))
+        fig, ax = plt.subplots(figsize=(5, 5), dpi=100)
 
         display = ConfusionMatrixDisplay(
             confusion_matrix=cm,
@@ -260,11 +270,12 @@ if uploaded_file is not None:
 
         ax.set_title(
             f"Confusion Matrix - {selected_model_name}",
-            fontsize=12
+            fontsize=11
         )
-        ax.set_xlabel("Predicted Class", fontsize=10)
-        ax.set_ylabel("Actual Class", fontsize=10)
+        ax.set_xlabel("Predicted Class", fontsize=9)
+        ax.set_ylabel("Actual Class", fontsize=9)
         ax.tick_params(axis="both", labelsize=8)
+        ax.set_aspect("equal")
 
         plt.tight_layout()
         st.pyplot(fig, use_container_width=False)
