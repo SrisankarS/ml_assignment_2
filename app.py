@@ -239,22 +239,33 @@ if uploaded_file is not None:
             labels=class_labels
         )
 
-        fig, ax = plt.subplots(figsize=(10, 8))
+        fig, ax = plt.subplots(figsize=(7, 5))
 
         display = ConfusionMatrixDisplay(
             confusion_matrix=cm,
             display_labels=class_labels
         )
-
+        
         display.plot(
             ax=ax,
             cmap="Blues",
             xticks_rotation=45,
-            colorbar=False
+            colorbar=False,
+            values_format="d"
         )
-
+        
+        ax.set_title(
+            f"Confusion Matrix - {selected_model_name}",
+            fontsize=12
+        )
+        
+        ax.set_xlabel("Predicted Class", fontsize=10)
+        ax.set_ylabel("Actual Class", fontsize=10)
+        
+        ax.tick_params(axis="both", labelsize=8)
+        
         plt.tight_layout()
-        st.pyplot(fig)
+        st.pyplot(fig, use_container_width=False)
         plt.close(fig)
 
         # --------------------------------------------------
