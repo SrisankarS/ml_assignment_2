@@ -1,5 +1,9 @@
 # Dry Bean Classification Using Machine Learning
 
+# Name: Sri Sankar Sivakumar
+# BITS ID: 2026AK05269
+# ML Assignment: 2
+
 ## 1. Problem Statement
 
 The objective of this project is to develop and compare five supervised machine learning classification algorithms to classify dry bean varieties using numerical features extracted from bean images.
