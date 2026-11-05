@@ -243,7 +243,7 @@ if uploaded_file is not None:
             labels=class_labels
         )
 
-        fig, ax = plt.subplots(figsize=(7, 5))
+        fig, ax = plt.subplots(figsize=(5, 3))
 
         display = ConfusionMatrixDisplay(
             confusion_matrix=cm,
