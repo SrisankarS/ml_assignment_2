@@ -1,9 +1,9 @@
+# Creating a python file to fed into Streamlit Web Application
 
-import streamlit as st
-import pandas as pd
-import numpy as np
-import joblib
 import os
+import joblib
+import pandas as pd
+import streamlit as st
 import matplotlib.pyplot as plt
 
 from sklearn.metrics import (
@@ -81,6 +81,7 @@ model_files = {
 def load_model(model_path):
     return joblib.load(model_path)
 
+
 # --------------------------------------------------
 # 5. Upload test dataset
 # --------------------------------------------------
@@ -98,7 +99,7 @@ if uploaded_file is not None:
         st.success("CSV file uploaded successfully!")
 
         st.write("### Dataset preview")
-        st.dataframe(test_df.head())
+        st.dataframe(test_df.head(), use_container_width=True)
 
         # Check required columns
         required_columns = feature_columns + [target_column]
@@ -109,9 +110,7 @@ if uploaded_file is not None:
         ]
 
         if missing_columns:
-            st.error(
-                f"Missing required columns: {missing_columns}"
-            )
+            st.error(f"Missing required columns: {missing_columns}")
             st.stop()
 
         if test_df.empty:
@@ -158,9 +157,7 @@ if uploaded_file is not None:
         model_path = model_files[selected_model_name]
 
         if not os.path.exists(model_path):
-            st.error(
-                f"Model file not found: {model_path}"
-            )
+            st.error(f"Model file not found: {model_path}")
             st.stop()
 
         model = load_model(model_path)
@@ -169,10 +166,18 @@ if uploaded_file is not None:
         y_proba = model.predict_proba(X_test)
 
         # --------------------------------------------------
-        # 8. Calculate evaluation metrics
+        # 8. Calculate the 6 evaluation metrics
         # --------------------------------------------------
 
         class_labels = model.classes_
+
+        if set(y_test.unique()) != set(class_labels):
+            st.error(
+                "The uploaded test dataset must contain all seven "
+                "bean classes represented by the selected trained model "
+                "to calculate multiclass AUC consistently."
+            )
+            st.stop()
 
         accuracy = accuracy_score(y_test, y_pred)
 
@@ -212,7 +217,6 @@ if uploaded_file is not None:
         # --------------------------------------------------
 
         st.write("## Model Evaluation Results")
-
         st.write("Selected model:", selected_model_name)
 
         col1, col2, col3 = st.columns(3)
@@ -245,7 +249,7 @@ if uploaded_file is not None:
             confusion_matrix=cm,
             display_labels=class_labels
         )
-        
+
         display.plot(
             ax=ax,
             cmap="Blues",
@@ -253,17 +257,15 @@ if uploaded_file is not None:
             colorbar=False,
             values_format="d"
         )
-        
+
         ax.set_title(
             f"Confusion Matrix - {selected_model_name}",
             fontsize=12
         )
-        
         ax.set_xlabel("Predicted Class", fontsize=10)
         ax.set_ylabel("Actual Class", fontsize=10)
-        
         ax.tick_params(axis="both", labelsize=8)
-        
+
         plt.tight_layout()
         st.pyplot(fig, use_container_width=False)
         plt.close(fig)
@@ -284,8 +286,7 @@ if uploaded_file is not None:
         )
 
         report_df = pd.DataFrame(report).transpose()
-
-        st.dataframe(report_df.round(4))
+        st.dataframe(report_df.round(4), use_container_width=True)
 
         # --------------------------------------------------
         # 12. Display predictions
@@ -299,7 +300,10 @@ if uploaded_file is not None:
             "Correct Prediction": y_test.values == y_pred
         })
 
-        st.dataframe(prediction_df.head(20))
+        st.dataframe(
+            prediction_df.head(20),
+            use_container_width=True
+        )
 
         st.success("Model evaluation completed successfully!")
 
