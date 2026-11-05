@@ -1,8 +1,8 @@
 # Dry Bean Classification Using Machine Learning
 
-## Name: Sri Sankar Sivakumar
-## BITS ID: 2026AK05269
-## ML Assignment: 2
+### Name: Sri Sankar Sivakumar
+### BITS ID: 2026AK05269
+### ML Assignment: 2
 
 ## 1. Problem Statement
 
