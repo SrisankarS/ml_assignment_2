@@ -226,7 +226,7 @@ if uploaded_file is not None:
         # 9. Display evaluation metrics
         # --------------------------------------------------
 
-        st.write("## Model Evaluation Results")
+        st.write("### Model Evaluation Results")
         st.write("Selected model:", selected_model_name)
 
         col1, col2, col3 = st.columns(3)
@@ -245,7 +245,7 @@ if uploaded_file is not None:
         # 10. Display confusion matrix
         # --------------------------------------------------
 
-        st.write("## Confusion Matrix")
+        st.write("### Confusion Matrix")
 
         cm = confusion_matrix(
             y_test,
@@ -285,7 +285,7 @@ if uploaded_file is not None:
         # 11. Display classification report
         # --------------------------------------------------
 
-        st.write("## Classification Report")
+        st.write("### Classification Report")
 
         report = classification_report(
             y_test,
@@ -303,7 +303,7 @@ if uploaded_file is not None:
         # 12. Display predictions
         # --------------------------------------------------
 
-        st.write("## Actual vs Predicted Classes")
+        st.write("### Actual vs Predicted Classes")
 
         prediction_df = pd.DataFrame({
             "Actual Class": y_test.values,
