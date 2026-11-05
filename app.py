@@ -18,9 +18,9 @@ from sklearn.metrics import (
     classification_report
 )
 
-# --------------------------------------------------
+
 # 1. Page configuration
-# --------------------------------------------------
+
 
 st.set_page_config(
     page_title="Dry Bean ML Model Evaluation",
@@ -46,9 +46,9 @@ st.write(
     "classification model, and evaluate its performance."
 )
 
-# --------------------------------------------------
+
 # 2. Expected dataset columns
-# --------------------------------------------------
+
 
 feature_columns = [
     "Area",
@@ -71,9 +71,9 @@ feature_columns = [
 
 target_column = "Class"
 
-# --------------------------------------------------
+
 # 3. Model file locations
-# --------------------------------------------------
+
 
 model_files = {
     "Logistic Regression": "models/logistic_regression.joblib",
@@ -83,18 +83,18 @@ model_files = {
     "Support Vector Machine": "models/svm.joblib"
 }
 
-# --------------------------------------------------
+
 # 4. Load selected trained model
-# --------------------------------------------------
+
 
 @st.cache_resource
 def load_model(model_path):
     return joblib.load(model_path)
 
 
-# --------------------------------------------------
+
 # 5. Upload test dataset
-# --------------------------------------------------
+
 
 uploaded_file = st.file_uploader(
     "Upload your test CSV file",
@@ -127,10 +127,10 @@ if uploaded_file is not None:
             st.error("The uploaded CSV contains no records.")
             st.stop()
 
-        X_test = test_df[feature_columns]
+        x_test = test_df[feature_columns]
         y_test = test_df[target_column]
 
-        if X_test.isnull().any().any() or y_test.isnull().any():
+        if x_test.isnull().any().any() or y_test.isnull().any():
             st.error(
                 "The uploaded dataset contains missing values. "
                 "Please upload a complete test dataset."
@@ -138,7 +138,7 @@ if uploaded_file is not None:
             st.stop()
 
         if not all(
-            pd.api.types.is_numeric_dtype(X_test[col])
+            pd.api.types.is_numeric_dtype(x_test[col])
             for col in feature_columns
         ):
             st.error("All 16 input features must be numeric.")
@@ -149,9 +149,7 @@ if uploaded_file is not None:
         st.write("Number of input features:", len(feature_columns))
         st.write("Number of classes:", y_test.nunique())
 
-        # --------------------------------------------------
         # 6. Select model
-        # --------------------------------------------------
 
         st.write("### Select a classification model")
 
@@ -160,9 +158,9 @@ if uploaded_file is not None:
             list(model_files.keys())
         )
 
-        # --------------------------------------------------
+
         # 7. Load model and generate predictions
-        # --------------------------------------------------
+
 
         model_path = model_files[selected_model_name]
 
@@ -172,12 +170,12 @@ if uploaded_file is not None:
 
         model = load_model(model_path)
 
-        y_pred = model.predict(X_test)
-        y_proba = model.predict_proba(X_test)
+        y_pred = model.predict(x_test)
+        y_proba = model.predict_proba(x_test)
 
-        # --------------------------------------------------
+
         # 8. Calculate the 6 evaluation metrics
-        # --------------------------------------------------
+
 
         class_labels = model.classes_
 
@@ -191,8 +189,7 @@ if uploaded_file is not None:
 
         accuracy = accuracy_score(y_test, y_pred)
 
-        auc = roc_auc_score(
-            y_test,
+        auc = roc_auc_score(y_test,
             y_proba,
             labels=class_labels,
             multi_class="ovr",
@@ -222,9 +219,9 @@ if uploaded_file is not None:
 
         mcc = matthews_corrcoef(y_test, y_pred)
 
-        # --------------------------------------------------
+
         # 9. Display evaluation metrics
-        # --------------------------------------------------
+
 
         st.write("### Model Evaluation Results")
         st.write("Selected model:", selected_model_name)
@@ -241,9 +238,9 @@ if uploaded_file is not None:
         col5.metric("F1 Score", f"{f1:.6f}")
         col6.metric("MCC", f"{mcc:.6f}")
 
-        # --------------------------------------------------
+
         # 10. Display confusion matrix
-        # --------------------------------------------------
+
 
         st.write("### Confusion Matrix")
 
@@ -281,9 +278,9 @@ if uploaded_file is not None:
         st.pyplot(fig, use_container_width=False)
         plt.close(fig)
 
-        # --------------------------------------------------
+
         # 11. Display classification report
-        # --------------------------------------------------
+
 
         st.write("### Classification Report")
 
@@ -299,9 +296,9 @@ if uploaded_file is not None:
         report_df = pd.DataFrame(report).transpose()
         st.dataframe(report_df.round(4), use_container_width=True)
 
-        # --------------------------------------------------
+
         # 12. Display predictions
-        # --------------------------------------------------
+
 
         st.write("### Actual vs Predicted Classes")
 
